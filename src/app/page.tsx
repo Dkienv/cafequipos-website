@@ -1,65 +1,187 @@
-import Image from "next/image";
+import Image from 'next/image'
+import Link from 'next/link'
+import { CATEGORIES } from '@/lib/categories'
+import CarouselBanner from '@/components/home/CarouselBanner'
+
+const CATEGORY_IMAGES: Record<string, string> = {
+  'coccion-barra-hornos': '/images/categorias/coccion-barra-hornos_v2.png',
+  'dispesandores-bebidas-cremoladeras-hielo': '/images/categorias/dispesandores-bebidas-cremoladeras-hielo_v2.png',
+  'instrumentos-medicion': '/images/categorias/instrumentos-medicion_v2.png',
+  'licuadoras-comerciales-procesadores-jugos': '/images/categorias/licuadoras-comerciales-procesadores-jugos_v2.jpg',
+  'maquinas-cafe-molinos-accesorios': '/images/categorias/maquinas-cafe-molinos-accesorios_v2.jpg',
+}
+
+const FEATURED_PRODUCTS = [
+  {
+    name: "Medidor de humedad de granos G'Inspectra Gehaka G939IP",
+    price: '3,527.00',
+    image: '/images/productos/Instrumentos de medición/GEHAKA_G939IP_F_v2.png',
+  },
+  {
+    name: 'Máquina espresso Wendougee Mantis II',
+    price: '822.00',
+    image: '/images/productos/Máquinas de café, molinos y accesorios/Wendougee_Mantis_ii_2000px.jpg',
+  },
+  {
+    name: 'Licuadora comercial Santos #65',
+    price: '799.99',
+    image: '/images/productos/Licuadoras comerciales y procesadores de jugos/SANTOS_62_F_V2.jpg',
+  },
+  {
+    name: 'Dispensador de bebidas de hielo y agua',
+    price: '1299.00',
+    image: '/images/productos/Dispensadores de bebidas, cremoladas y hielo/ICESWAN_ANI80C_F.png',
+  },
+]
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <div className="flex flex-col w-full bg-white">
+
+      {/* 1. HERO BANNERS */}
+      <section className="relative w-full h-[30vh] min-h-[350px] overflow-hidden group">
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
+          src="/images/hero/hero.jpg"
+          alt="Coffee making hero"
+          fill
           priority
+          className="object-cover scale-105 group-hover:scale-100 transition-transform duration-[2s] ease-out brightness-50"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-10">
+           <h1 className="sr-only">CaféQuipos - Equipos de alta calidad para café</h1>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-white to-transparent" />
+      </section>
+
+      {/* 2. NUESTRAS CATEGORIAS SECTION */}
+      <section className="py-20 px-4 md:px-6 max-w-7xl mx-auto w-full text-center">
+        <h2 className="text-2xl md:text-3xl font-heading font-medium mb-12 tracking-wider text-zinc-900 uppercase relative inline-block">
+          Nuestras Categorias
+        </h2>
+
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 lg:gap-1 mx-auto">
+          {CATEGORIES.slice(0, 5).map((category) => (
+            <Link
+              key={category.slug}
+              href={`/productos/categoria/${category.slug}`}
+              className="group flex flex-col overflow-hidden h-full"
+            >
+              {/* Image area */}
+              <div className="relative h-52 overflow-hidden">
+                <Image
+                  src={CATEGORY_IMAGES[category.slug]}
+                  alt={category.label}
+                  fill
+                  className="object-cover object-[center_80%] group-hover:scale-110 transition-transform duration-700 ease-out" // -translate-y-5 para que se vea la parte de arriba de la imagen. Update: 80% para que se vea la parte de arriba de la imagen con object-[center_80%]
+                />
+                <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors duration-500" />
+                <span className="absolute inset-0 flex items-center justify-center text-white text-xs font-heading font-bold uppercase tracking-widest text-center px-3 leading-tight">
+                  {category.label}
+                </span>
+              </div>
+              {/* Yellow strip */}
+              <div className="bg-primary px-3 py-3 flex items-center flex-1">
+                <span className="text-zinc-900 text-xs font-heading font-medium text-left leading-snug">
+                  {category.label} →
+                </span>
+              </div> 
+            </Link>
+          ))}
         </div>
-      </main>
+      </section>
+
+      {/* 3. PRODUCTOS DESTACADOS SECTION */}
+      <section className="py-16 px-4 md:px-6 max-w-7xl mx-auto w-full text-center">
+        <h2 className="text-2xl md:text-3xl font-heading font-medium mb-12 tracking-wider text-zinc-900 uppercase">
+          Productos Destacados
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+          {FEATURED_PRODUCTS.map((product) => (
+            <div key={product.name} className="flex flex-col items-center text-center gap-3">
+              <div className="relative w-full h-64">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  className="object-contain object-bottom"
+                />
+              </div>
+              <p className="text-sm text-zinc-700 font-medium leading-snug">{product.name}</p>
+              <p className="text-sm font-bold text-zinc-900">${product.price} USD</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 4. FULL-WIDTH CTA BANNER & PAGINATION */}
+      <CarouselBanner />
+
+      {/* 5. BLOG SECTION */}
+      <section className="py-20 px-6 max-w-[1300px] mx-auto w-full mb-12">
+        <h2 className="text-2xl md:text-3xl font-heading font-medium mb-16 text-center tracking-wider text-zinc-900 uppercase">
+          Blog
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 lg:gap-3 max-w-6xl mx-auto group/blog">
+          {/* Article 1 */}
+          <article className="flex flex-col h-full bg-primary relative group cursor-pointer transition-all duration-500">
+            <div className="relative h-64 md:h-72 w-full overflow-hidden">
+              <Image
+                src="https://placehold.co/600x600/1c1c1b/ffffff.png?text=BLOG+1"
+                alt="Cafequipos: 20 Años"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+              />
+            </div>
+            <div className="p-8 pb-12 flex-1 flex flex-col items-start text-left bg-primary relative z-10 transition-colors duration-300">
+              <h3 className="text-lg md:text-xl font-heading font-medium mb-3 text-zinc-900 line-clamp-2">Cafequipos: 20 Años de Aniversario</h3>
+              <p className="text-zinc-700 text-[10px] sm:text-xs mb-4 uppercase font-bold tracking-widest">5 de Marzo de 2026</p>
+              <p className="text-zinc-800 text-sm leading-relaxed font-medium">
+                La empresa no siempre vendió máquinas de café, de hecho, la razón social mantiene el giro de negocio con el que comenzamos: Instrumentos y Sistemas que nació en Cusco como...
+              </p>
+            </div>
+          </article>
+
+          {/* Article 2 */}
+          <article className="flex flex-col h-full bg-primary relative group cursor-pointer transition-all duration-500">
+            <div className="relative h-64 md:h-72 w-full overflow-hidden">
+              <Image
+                src="https://placehold.co/600x600/1c1c1b/ffffff.png?text=BLOG+2"
+                alt="Emprendimiento Barista Lab"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+              />
+            </div>
+            <div className="p-8 pb-12 flex-1 flex flex-col items-start text-left bg-primary relative z-10 transition-colors duration-300">
+              <h3 className="text-lg md:text-xl font-heading font-medium mb-3 text-zinc-900 line-clamp-2">Historias de Emprendimiento: Centro Barista Lab</h3>
+              <p className="text-zinc-700 text-[10px] sm:text-xs mb-4 uppercase font-bold tracking-widest">5 de Marzo de 2026</p>
+              <p className="text-zinc-800 text-sm leading-relaxed font-medium">
+                Entrevistamos a Brhayam Quispe y Jeraldine Torres, fundadores de la escuela de barismo Centro Barista Lab y socios de DEKANO — Barista Shop. Quienes nos cuentan un poco más acerca...
+              </p>
+            </div>
+          </article>
+
+          {/* Article 3 */}
+          <article className="flex flex-col h-full bg-primary relative group cursor-pointer transition-all duration-500">
+            <div className="relative h-64 md:h-72 w-full overflow-hidden">
+              <Image
+                src="https://placehold.co/600x600/1c1c1b/ffffff.png?text=BLOG+3"
+                alt="Campeones de Barismo"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+              />
+            </div>
+            <div className="p-8 pb-12 flex-1 flex flex-col items-start text-left bg-primary relative z-10 transition-colors duration-300">
+              <h3 className="text-lg md:text-xl font-heading font-medium mb-3 text-zinc-900 line-clamp-2">Campeones de Barismo: Entrevista a Renzo Ruiz</h3>
+              <p className="text-zinc-700 text-[10px] sm:text-xs mb-4 uppercase font-bold tracking-widest">5 de Marzo de 2026</p>
+              <p className="text-zinc-800 text-sm leading-relaxed font-medium">
+                Conversamos con Renzo Ruiz; Campeón Nacional de Barismo Perú 2022. Barista, Bartender y Sommelier profesional. Socio de la Tostaduría y Cafetería Mamaquilla, y quién nos representará...
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
     </div>
-  );
+  )
 }
