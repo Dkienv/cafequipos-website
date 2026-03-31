@@ -29,6 +29,7 @@ Uses the **App Router** (`src/app/`). There is no Pages Router in this project.
 |---|---|
 | `/` | `src/app/page.tsx` |
 | `/productos/categoria/[slug]` | `src/app/productos/categoria/[slug]/page.tsx` |
+| `/productos/[slug]` | `src/app/productos/[slug]/page.tsx` (Phase 3 placeholder) |
 | `/servicios` | `src/app/servicios/page.tsx` |
 | `/nosotros` | `src/app/nosotros/page.tsx` |
 | `/contacto` | `src/app/contacto/page.tsx` |
@@ -38,11 +39,13 @@ Uses the **App Router** (`src/app/`). There is no Pages Router in this project.
 
 - `src/components/layout/Navbar.tsx` — Main navigation using `lucide-react` and dropdown
 - `src/components/layout/Footer.tsx` — Global footer
+- `src/components/productos/ProductCard.tsx` — Product card used in the category listing page
 - *Note*: Homepage sections (Hero, Categories Grid, Blog) are currently built directly within `src/app/page.tsx`.
 
 ### Lib / integrations
 
 - `src/lib/categories.ts` — Contains the `CATEGORIES` array for the Navbar dropdown.
+- `src/lib/products.ts` — `Product` type, `PRODUCTS` mock array (15 items across 5 categories), and helpers: `getProductsByCategory`, `getProductBySlug`, `formatPrice`.
 - `src/lib/utils.ts` — `cn()` helper (clsx + tailwind-merge) (stub)
 - `src/lib/state_zustand.ts` currently contains the Zustand cart store (stub)
 - `src/lib/cloudinary.ts` — empty; intended for Cloudinary code
