@@ -5,11 +5,15 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { CATEGORIES } from '@/lib/categories'
 import { Search, User, ShoppingBag, Menu, X } from 'lucide-react'
+import { useCartStore } from '@/lib/state_zustand'
+import CartDrawer from '@/components/cart/CartDrawer'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false)
+  const { openCart, totalItems } = useCartStore()
+  const itemCount = totalItems()
 
   const closeAll = () => {
     setMobileOpen(false)
@@ -17,6 +21,8 @@ export default function Navbar() {
   }
 
   return (
+    <>
+    <CartDrawer />
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-zinc-200 shadow-sm h-16">
       <div className="container mx-auto px-6 h-full flex items-center justify-between">
 
@@ -92,11 +98,17 @@ export default function Navbar() {
           <button className="hover:text-primary transition-colors" aria-label="User Account">
             <User className="w-5 h-5" />
           </button>
-          <button className="hover:text-primary transition-colors relative" aria-label="Shopping Cart">
+          <button
+            onClick={openCart}
+            className="hover:text-primary transition-colors relative"
+            aria-label="Shopping Cart"
+          >
             <ShoppingBag className="w-5 h-5" />
-            <span className="absolute -top-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-primary text-[8px] font-bold text-black">
-              0
-            </span>
+            {itemCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-black">
+                {itemCount > 99 ? '99+' : itemCount}
+              </span>
+            )}
           </button>
           {/* HAMBURGER — mobile only */}
           <button
@@ -183,5 +195,6 @@ export default function Navbar() {
         </div>
       )}
     </nav>
+    </>
   )
 }

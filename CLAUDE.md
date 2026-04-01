@@ -29,7 +29,8 @@ Uses the **App Router** (`src/app/`). There is no Pages Router in this project.
 |---|---|
 | `/` | `src/app/page.tsx` |
 | `/productos/categoria/[slug]` | `src/app/productos/categoria/[slug]/page.tsx` |
-| `/productos/[slug]` | `src/app/productos/[slug]/page.tsx` (Phase 3 placeholder) |
+| `/productos/[slug]` | `src/app/productos/[slug]/page.tsx` (Phase 4 placeholder) |
+| `/checkout` | `src/app/checkout/page.tsx` |
 | `/servicios` | `src/app/servicios/page.tsx` |
 | `/nosotros` | `src/app/nosotros/page.tsx` |
 | `/contacto` | `src/app/contacto/page.tsx` |
@@ -37,9 +38,11 @@ Uses the **App Router** (`src/app/`). There is no Pages Router in this project.
 
 ### Components
 
-- `src/components/layout/Navbar.tsx` — Main navigation using `lucide-react` and dropdown
+- `src/components/layout/Navbar.tsx` — Main navigation using `lucide-react` and dropdown; renders `<CartDrawer />` and wires the cart icon to the Zustand store.
 - `src/components/layout/Footer.tsx` — Global footer
-- `src/components/productos/ProductCard.tsx` — Product card used in the category listing page
+- `src/components/productos/ProductCard.tsx` — Product card used in the category listing page; renders `<AddToCartButton>`.
+- `src/components/cart/CartDrawer.tsx` — Slide-in cart panel (client component); reads from `useCartStore`.
+- `src/components/cart/AddToCartButton.tsx` — Client component button; calls `addItem` + `openCart` from `useCartStore`.
 - *Note*: Homepage sections (Hero, Categories Grid, Blog) are currently built directly within `src/app/page.tsx`.
 
 ### Lib / integrations
@@ -47,14 +50,14 @@ Uses the **App Router** (`src/app/`). There is no Pages Router in this project.
 - `src/lib/categories.ts` — Contains the `CATEGORIES` array for the Navbar dropdown.
 - `src/lib/products.ts` — `Product` type, `PRODUCTS` mock array (15 items across 5 categories), and helpers: `getProductsByCategory`, `getProductBySlug`, `formatPrice`.
 - `src/lib/utils.ts` — `cn()` helper (clsx + tailwind-merge) (stub)
-- `src/lib/state_zustand.ts` currently contains the Zustand cart store (stub)
+- `src/lib/state_zustand.ts` — Zustand cart store (`useCartStore`). Exports `CartItem` type. Actions: `addItem`, `removeItem`, `updateQuantity`, `clearCart`, `openCart`, `closeCart`. Derived: `totalItems()`, `totalPrice()`.
 - `src/lib/cloudinary.ts` — empty; intended for Cloudinary code
 - `src/lib/supabase.ts` — empty; intended for Supabase client
 - `src/lib/resend.ts` — empty; intended for Resend email client
 
 ### State management
 
-Cart state lives in `src/lib/state_zustand.ts` via Zustand (`useCartStore`).
+Cart state lives in `src/lib/state_zustand.ts` via Zustand (`useCartStore`). The store manages the full cart lifecycle including drawer visibility. `CartDrawer` is rendered inside `Navbar` so it is always mounted and the store controls its open/close state.
 
 ### Styling
 

@@ -36,30 +36,18 @@ Currently a stub showing only `"Productos — {slug}"`. Needs:
 
 ---
 
-## Phase 3: Cart & Checkout
+## Phase 3: Cart & Checkout — COMPLETED ✅
 
-### Goal
-Make the cart icon functional and allow users to complete a purchase flow.
+All items below have been implemented.
 
-### [MODIFY] `src/lib/state_zustand.ts`
-Currently a minimal stub. Needs:
-- Typed `CartItem`: `{ product: Product; quantity: number }`.
-- Actions: `addItem`, `removeItem`, `updateQuantity`, `clearCart`.
-- Derived: `totalItems`, `totalPrice`.
-
-### [NEW] `src/components/cart/CartDrawer.tsx`
-- Slide-in panel triggered by the cart icon in the Navbar.
-- Lists items with image, name, quantity controls, and line price.
-- Shows subtotal and a "Proceder al pago" button linking to `/checkout`.
-
-### [NEW] `src/app/checkout/page.tsx`
-- Order summary on the right.
-- Shipping/billing form on the left.
-- "Confirmar pedido" button that calls `POST /api/checkout`.
-
-### [MODIFY] `src/app/api/checkout/route.ts`
-- Validate the cart payload.
-- (Initially) return a mock success response; later integrate a payment gateway.
+- `src/lib/state_zustand.ts` — Typed `CartItem`, full store: `addItem`, `removeItem`, `updateQuantity`, `clearCart`, `totalItems`, `totalPrice`, `isOpen`/`openCart`/`closeCart`.
+- `src/components/cart/AddToCartButton.tsx` — Client component; calls `addItem` + `openCart` on click.
+- `src/components/cart/CartDrawer.tsx` — Slide-in panel with item list, quantity controls, subtotal, "Proceder al pago" link.
+- `src/components/productos/ProductCard.tsx` — Now renders `<AddToCartButton>` instead of a static button.
+- `src/components/layout/Navbar.tsx` — Cart icon wired to `openCart`, live badge, `<CartDrawer />` rendered.
+- `src/app/checkout/page.tsx` — Two-column layout: shipping form + order summary. Shows confirmation on success.
+- `src/app/api/checkout/route.ts` — Validates cart, required fields, email format, phone format. Returns `{ success, orderId }` or `400` with specific field error message.
+- `src/app/page.tsx` — "Productos Destacados" section uses `PRODUCTS.filter(p => p.featured)` and renders `<AddToCartButton>` on each card.
 
 ---
 
