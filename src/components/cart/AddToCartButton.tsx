@@ -10,7 +10,9 @@ export default function AddToCartButton({ product }: { product: Product }) {
     <button
       onClick={() => {
         addItem(product)
-        openCart()
+        if (typeof window !== 'undefined' && window.innerWidth >= 768) {
+          openCart()
+        }
       }}
       className="bg-primary text-zinc-900 text-sm px-4 py-2 hover:brightness-95 transition-all font-medium"
     >
