@@ -2,6 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { CATEGORIES } from '@/lib/categories'
 import CarouselBanner from '@/components/home/CarouselBanner'
+import { PRODUCTS, formatPrice } from '@/lib/products'
+import AddToCartButton from '@/components/cart/AddToCartButton'
 
 const CATEGORY_IMAGES: Record<string, string> = {
   'coccion-barra-hornos': '/images/categorias/coccion-barra-hornos_v2.png',
@@ -11,28 +13,7 @@ const CATEGORY_IMAGES: Record<string, string> = {
   'maquinas-cafe-molinos-accesorios': '/images/categorias/maquinas-cafe-molinos-accesorios_v2.jpg',
 }
 
-const FEATURED_PRODUCTS = [
-  {
-    name: "Medidor de humedad de granos G'Inspectra Gehaka G939IP",
-    price: '3,527.00',
-    image: '/images/productos/Instrumentos de medición/GEHAKA_G939IP_F_v2.png',
-  },
-  {
-    name: 'Máquina espresso Wendougee Mantis II',
-    price: '822.00',
-    image: '/images/productos/Máquinas de café, molinos y accesorios/Wendougee_Mantis_ii_2000px.jpg',
-  },
-  {
-    name: 'Licuadora comercial Santos #65',
-    price: '799.99',
-    image: '/images/productos/Licuadoras comerciales y procesadores de jugos/SANTOS_62_F_V2.jpg',
-  },
-  {
-    name: 'Dispensador de bebidas de hielo y agua',
-    price: '1299.00',
-    image: '/images/productos/Dispensadores de bebidas, cremoladas y hielo/ICESWAN_ANI80C_F.png',
-  },
-]
+const FEATURED_PRODUCTS = PRODUCTS.filter((p) => p.featured)
 
 export default function Home() {
   return (
@@ -59,7 +40,7 @@ export default function Home() {
           Nuestras Categorias
         </h2>
 
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 lg:gap-1 mx-auto">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 lg:gap-1 mx-auto ">
           {CATEGORIES.slice(0, 5).map((category) => (
             <Link
               key={category.slug}
@@ -95,20 +76,24 @@ export default function Home() {
         <h2 className="text-2xl md:text-3xl font-heading font-medium mb-12 tracking-wider text-zinc-900 uppercase">
           Productos Destacados
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl mx-auto group">
           {FEATURED_PRODUCTS.map((product) => (
-            <div key={product.name} className="flex flex-col items-center text-center gap-3">
-              <div className="relative w-full h-64">
+            <article
+              key={product.id}
+              className="flex flex-col items-center text-center gap-3 p-4 rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-xl group/product bg-white"
+            >
+              <div className="relative w-full h-64 overflow-hidden rounded-lg">
                 <Image
                   src={product.image}
                   alt={product.name}
                   fill
-                  className="object-contain object-bottom"
+                  className="object-contain object-bottom transition-transform duration-500 group-hover/product:scale-110"
                 />
               </div>
-              <p className="text-sm text-zinc-700 font-medium leading-snug">{product.name}</p>
-              <p className="text-sm font-bold text-zinc-900">${product.price} USD</p>
-            </div>
+              <p className="text-sm text-zinc-700 font-medium leading-snug group-hover/product:text-zinc-900 transition-colors">{product.name}</p>
+              <p className="text-sm font-bold text-zinc-900">{formatPrice(product.price)}</p>
+              <AddToCartButton product={product} />
+            </article>
           ))}
         </div>
       </section>
